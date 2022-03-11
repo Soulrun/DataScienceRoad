@@ -1,2 +1,12 @@
-# DataScienceRoad
-This is the repository for my data science evolving road
+# Rico Journey
+
+> 工作生活的记录 Since 2022.03
+
+## SQL
+> 自己学习SQL的感悟
+
+## 机器学习
+
+
+## 汽车构造
+> 基于《<汽车构造>第三版》 吉林大学 机械工业出版社
