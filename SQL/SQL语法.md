@@ -179,3 +179,236 @@ UNION ALL
 SELECT country FROM apps
 ORDER BY country;
 ```
+## SELECT INTO语句
+使得数据从一个表复制并插入到另一个新表中
+> MySQL不支持SELECT ...INTO 语句，但支持INSERT INTO ... SELECT
+> 或者使用 CREATE TABLE ... AS ... SELECT * FROM
+
+``` sql 
+    SELECT * 
+    INTO NEW_TABLE
+    FROM COPIED_TABLE;
+```
+## INSERT INTO SELECT 语句
+同样的将一个表的数据复制并插入到一个已存在的表中
+``` SQL
+INSERT INTO NEW_TABLE
+SELECT * FROM COPIED_TABLE;
+或者我们可以只复制选定的列插入到另一个表中
+INSERT INTO NEW_TABLE(COLUME1,COLUME2)
+SELECT COLUME1,COLUME2 FROM COPIED_TABLE;
+```
+
+## CREATE DATABASE 语句
+用于创建数据库
+``` SQL
+CREATE DATABASE NEW_DB;
+```
+
+## CREATE TABLE 语句
+用于创建数据库中的表
+``` SQL
+CREATE TABLE NEW_TABLE
+(
+    COLUMN_NAME1 DATA_TYPE(SIZE),
+    COLUMN_NAME2 DATA_TYPE(SIZE),
+    ....
+);
+
+比如创建一个名为'person'的表，包含三列:ID,Name,City
+ID为纯数字，可为整型 int; Name、city为字符，可为varchar，即
+
+CREATE TABLE PERSON
+(
+    ID INT,
+    NAME VARCHAR(255),
+    CITY VARCHAR(255)
+);
+```
+
+## SQL CONSTRAINTS SQL约束
+用于规定表中的数据规则，可在创建表时规定（通过CREATE TABLE语句），或者之后规定(通过ALTER TABLE语句)
+
+```SQL
+CREATE TABLE TABLE_NAME
+(
+    COLUMN_NAME1 DATA_TYPE(SIZE) CONSTRAINT_NAME,
+    COLUMN_NAME2 DATA_TYPE(SIZE) CONSTRAINT_NAME,
+    ...
+);
+
+SQL中约束有：
+- NOT NULL //不能存储NULL值，即必填
+- UNIQUE //每一行必须有唯一值
+- PRIMARY KEY // NOT NULL & UNIQUE 的结合，确保这列有唯一表示
+- FOREIGN KEY //保证一个表中的数
+- CHECK // 保证列中的值符合指定的条件
+- DEFAULT // 规定没有给列赋值时的默认值
+```
+
+### NOT NUL
+
+```sql
+ALTER TABLE PERSON
+MODIFY AGE INT NOT NULL;
+
+在一个已创建的表'AGE'字段中添加NOT NULL约束
+
+ALTER TABLE PERSON 
+MODIFY AGE INT NULL;
+删除已创建表'AGE'字段的NOT NULL约束
+```
+
+### FOREIGN KEY 
+
+```SQL
+CREATE TABLE PERSON
+(
+    ID INT NOT NULL,
+    NAME VARCHAR(255),
+    TYPE INT NOT NULL,
+    PRIMARY KEY(ID),
+    FOREIGN KEY (TYPE) REFERENCES ORDER(TYPE)
+)
+
+ALTER TABLE ORDER
+DROP FOREIGN KEY fk_TYPE;
+撤销外键约束
+```
+### CHECK
+```SQL
+CREATE TABLE Persons
+(
+P_Id int NOT NULL,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255),
+CHECK (P_Id>0)
+)
+
+
+ALTER TABLE PERSONS
+ADD CHECK (P_Id <0)
+
+ALTER TABLE PERSONS
+DROP CONSTRAINT chk_PERSON
+```
+
+## CREATE INDEX 语句
+
+用于在表中创建索引
+在不读取整个表的情况下，索引使得数据库应用程序可以更快地查找数据
+
+``` sql
+CREATE INDEX INDEX_NAME
+ON TABLE_NAME(COLUMN_NAME);
+
+DROP INDEX TABLE_NAME.INDEX_NAME
+删除索引
+
+DROP TABLE TABLE_NAME
+
+DROP DATABASE DATABASE_NAME
+
+TRUNCATE TABLE TABLE_NAME
+仅仅删除表内数据不删除表本身
+```
+
+## ALTER TABLE
+用于在已有的表中添加、删除或修改列。
+``` SQL
+添加列 - ADD
+ALTER TABLE TABLE_NAME
+ADD COLUMN_NAME DATATYPE;
+
+删除列 - DROP
+ALTER TABLE TABLE_NAME
+DROP COLUMN COLUMN_NAME
+
+改变列数据类型 - MODIFY
+ALTER TABLE TABLE_NAME
+MODIFY COLUMN COLUMN_NAME DATATYPE
+```
+
+## AUTO INCREMENT 字段
+可以在新纪录插入表中时生成一个唯一的数字
+
+``` SQL
+CREATE TABLE PERSON
+(
+    ID INT NOT NULL AUTO_INCREMENT,
+    NAME VARCHAR(255),
+    CITY VARCHAR(255),
+    PRIMARY KEY(ID)
+);
+将person表中的id列定义为auto-increment主键字段
+```
+  在**SQL SERVER**中的语法用IDENTITY 关键字来执行AUTO-INCREMENT任务
+```SQL 
+CREATE TABLE Persons
+(
+ID int IDENTITY(1,1) PRIMARY KEY,
+LastName varchar(255) NOT NULL,
+FirstName varchar(255),
+Address varchar(255),
+City varchar(255)
+)
+其中IDENTITY(1,1)代表以1开始，递增1
+```
+## SQL views 视图
+视图是可视化的表,隐藏了底层的表结构，简化了数据访问操作；加强了安全性，使得用户只看到了VIEW所显示的数据
+``` SQL
+CREATE VIEW VIEW_NAME AS 
+SELECT COLUMN_NAME
+FROM TABLE_NAME
+WHERE CONDITION;
+```
+查询现在正在使用的产品语句
+```sql
+CREATE VIEW [CURRENT PRODUCT LIST] AS 
+SELECT PRODUCTI_ID, PRODUCTNAME
+FROM PRODUCTS
+WHERE DISCONTINUED = NO
+```
+更新视图 CREATE OR REPLACE VIEW 语法
+``` sql
+CRAETE OR REPLACE VIEW VIEW_NAME AS 
+SELECT COLUMN_NAME
+FROM TABLE_NAME
+WHERE CONDITION
+```
+## DATE 函数
+SQL内建日期函数
+> MYSQL
+> - NOW( ) 返回当前的日期和时间
+> - CURDATE( ) 返回当前的日期
+> - CURTIME( ) 返回当前的时间
+> - DATE( ) 提取日期或时间表达式的日期部分
+> - EXTRACT( ) 返回日期时间的单独部分
+> - DATE_ADD( ) 向日期添加指定的时间间隔
+> - DATE_SUB( ) 从日期减去指定的时间间隔
+> - DATEDIFF( ) 返回两个日期之间的天数
+> - DATE_FORMATE( ) 用不同的格式显示日期时间
+
+## NULL值
+代表遗漏的未知数据
+>工作中不使用NULL的原因：
+> - 不利于代码的可读性和可维护性
+> - 存在NULL值，会影响计数(COUNT)和不等(!=)查询、统计、运算结果
+
+### NULL函数
+MYSQL  - **IFNULL()**
+``` SQL
+SELECT PNAME,PRICE* (STOCK + IFNULL(ORDER,0))
+FROM PRODUCT
+如果ORDER是NULL，则返回0
+```
+微软同样功能的函数为**ISNULL( )**
+
+ORACLE的相应函数为**NVL( )**
+
+## SQL 通用数据类型
+数据库表中的每个列都要求有名称和数据类型
+> @ https://www.runoob.com/sql/sql-datatypes-general.html
+
