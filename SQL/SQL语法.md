@@ -412,3 +412,28 @@ ORACLE的相应函数为**NVL( )**
 数据库表中的每个列都要求有名称和数据类型
 > @ https://www.runoob.com/sql/sql-datatypes-general.html
 
+# SQL 函数
+> SQL 有很多用于计算和计数的内建函数
+
+## SQL Aggregate 函数
+从列中取得的值，返回一个单一值
+```SQL
+AVG( ) - 返回平均值
+COUNT( ) - 返回行数
+FIRST( ) - 返回第一个记录的值
+LAST( )
+MAX( )
+MIN( )
+SUM( )
+```
+## SQL SCALAR函数
+基于输入值，返回一个单一值
+``` SQL
+UCASE( ) - 将某个字段转换为大写
+LCASE( ) - 将某个字段转换为小写
+MID( ) - 从某个文本字段提取字符,MySQL
+SubString(字段,1,end) - 从某个文本字段提取字符
+LEN( ) - 返回字段长度
+ROUND( ) - 对数值进行制定小数位的四舍五入
+NOW( ) - 返回当前的系统日期和时间
+FORMAT( ) - 格式化某个字段的显示方式
